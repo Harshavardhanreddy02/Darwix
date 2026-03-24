@@ -1,0 +1,24 @@
+# --- Python Virtual Environment ---
+venv/
+env/
+__pycache__/
+*.pyc
+
+# --- Large AI Models & Cache ---
+# Hugging Face downloads models here by default
+.cache/
+hub/
+
+# --- Project Specific Outputs ---
+# Don't track the generated audio files
+*.mp3
+*.wav
+
+# --- Environment & OS Files ---
+.env
+.DS_Store
+Thumbs.db
+
+# --- IDE Specific ---
+.vscode/
+.idea/
