@@ -1,177 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎙️</text></svg>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VocalSync | The Empathy Engine</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎙️</text></svg>">
+    <title>VocalSync AI & Storyboard</title>
     <style>
         :root {
-            --bg-deep: #0f172a;
-            --accent: #38bdf8;
-            --glass: rgba(30, 41, 59, 0.7);
+            --bg-deep: #020617;
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --glass: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --text-main: #f1f5f9;
         }
 
         body {
             font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--bg-deep);
-            background-image: radial-gradient(circle at 20% 20%, #1e293b 0%, #0f172a 100%);
+            background: radial-gradient(circle at 10% 20%, #0f172a 0%, #020617 100%);
             color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            margin: 0; padding: 40px 20px;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
 
-        .main-card {
+        .container { width: 100%; max-width: 800px; z-index: 1; }
+
+        .card {
             background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 40px;
-            border-radius: 24px;
-            width: 450px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(20px);
+            padding: 35px; border-radius: 28px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            margin-bottom: 40px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        h1 {
-            text-align: left;
-            margin-top: 0;
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(to right, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
-        }
+        .card:hover { border-color: rgba(255,255,255,0.2); }
 
-        .input-group {
-            margin-top: 25px;
-        }
+        h1 { margin: 0 0 10px 0; font-size: 32px; font-weight: 800; letter-spacing: -1.5px; }
+        .blue-grad { background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .green-grad { background: linear-gradient(135deg, #10b981, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         textarea {
-            width: 100%;
-            height: 120px;
-            padding: 15px;
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            color: white;
-            font-size: 15px;
-            resize: none;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
+            width: 100%; height: 110px; padding: 18px; 
+            background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; color: white; font-size: 15px; resize: none; box-sizing: border-box; margin-top: 15px;
         }
 
-        textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        .btn {
+            width: 100%; padding: 16px; margin-top: 20px; border: none; border-radius: 14px;
+            font-weight: 800; font-size: 16px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
         }
 
-        .action-btn {
-            width: 100%;
-            padding: 14px;
-            margin-top: 15px;
-            border: none;
-            border-radius: 12px;
-            background: var(--accent);
-            color: #0f172a;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-        }
-
-        .action-btn:hover {
-            background: #7dd3fc;
-            transform: translateY(-2px);
-        }
-
-        .action-btn:active {
-            transform: translateY(0);
-        }
+        .btn-blue { background: var(--accent-blue); color: #020617; }
+        .btn-green { background: var(--accent-green); color: #020617; }
 
         .output-panel {
-            margin-top: 30px;
-            padding: 20px;
-            border-radius: 16px;
-            background: rgba(15, 23, 42, 0.5);
-            border-left: 4px solid var(--accent);
+            margin-top: 25px; padding: 25px; border-radius: 20px; 
+            background: rgba(15, 23, 42, 0.9); border-left: 5px solid var(--accent-blue);
         }
 
-        .stat-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
+        /* Storyboard Grid Styles */
+        .story-grid { display: flex; flex-direction: column; gap: 30px; margin-top: 30px; }
+        .panel { background: #1e293b; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .panel img { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000; }
+        .panel-body { padding: 25px; }
+        .prompt-tag { font-size: 11px; color: var(--accent-green); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        
+        .debug-prompt {
+            margin-top: 12px; font-size: 12px; color: #64748b; font-style: italic;
+            background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;
         }
 
-        .stat-tag {
-            font-size: 12px;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .stat-value {
-            font-size: 18px;
-            font-weight: 600;
-            color: white;
-        }
-
-        audio {
-            margin-top: 15px;
-            width: 100%;
-            height: 40px;
-            filter: invert(100%) hue-rotate(180deg) brightness(1.5);
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        audio { width: 100%; margin-top: 15px; filter: invert(100%) hue-rotate(180deg) brightness(1.2); }
     </style>
 </head>
-
 <body>
 
-<div class="main-card">
-    <h1>VocalSync AI</h1>
-
-    <form action="/analyze" method="post">
-        <div class="input-group">
-            <textarea name="text" placeholder="Enter text for emotional synthesis...">{{text if text else ""}}</textarea>
-        </div>
-        <button type="submit" class="action-btn">Synthesize Voice</button>
+<div class="container">
+    
+   <div class="card">
+    <h1 class="green-grad">🎬 Pitch Visualizer</h1>
+    <p style="color: #94a3b8; font-size: 14px;">Translating narratives into a 3-panel storyboard.</p>
+    
+    <form action="/visualize" method="post">
+        <textarea name="story_text" placeholder="Enter your story here...">{{story_text if story_text else ""}}</textarea>
+        <button type="submit" class="btn btn-green">Generate Visual Storyboard</button>
     </form>
 
-    {% if emotion %}
-    <div class="output-panel">
-        <div class="stat-grid">
-            <div>
-                <div class="stat-tag">Detected Mood</div>
-                <div class="stat-value">{{emotion | capitalize}}</div>
+    {% if storyboard %}
+    <div class="story-grid">
+        {% for panel in storyboard %}
+        <div class="panel" style="margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden;">
+            <div style="background: #000; width: 100%; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center;">
+                <img src="{{ panel.image_url }}" 
+                     alt="Scene {{ panel.scene_number }}" 
+                     style="width: 100%; height: 100%; object-fit: cover;"
+                     onerror="this.src='https://via.placeholder.com/800x450?text=AI+Generating...'">
             </div>
-            <div>
-                <div class="stat-tag">Confidence</div>
-                <div class="stat-value">{{intensity}}</div>
+            
+            <div class="panel-body" style="padding: 20px; background: rgba(30, 41, 59, 0.5);">
+                <span style="color: #10b981; font-weight: 800; font-size: 11px; text-transform: uppercase;">MOMENT 0{{ panel.scene_number }}</span>
+                <p style="margin: 10px 0; color: #fff; font-size: 16px;">{{ panel.original_text }}</p>
+                <div style="font-size: 12px; color: #64748b; font-style: italic; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
+                    <strong>Prompt:</strong> {{ panel.visual_prompt }}
+                </div>
             </div>
         </div>
-
-        <div class="stat-tag">Audio Modulation</div>
-        <div style="font-size: 13px; margin-top: 5px; color: #cbd5e1;">
-            Rate: {{params.rate}} | Vol: {{params.volume}} | Pitch: {{params.pitch}}
-        </div>
-
-        <audio controls>
-            <source src="/audio" type="audio/mpeg">
-        </audio>
+        {% endfor %}
     </div>
     {% endif %}
+</div>
+
+    <div class="card">
+        <h1 class="blue-grad">🎙️ VocalSync AI</h1>
+        <p style="color: #94a3b8; font-size: 14px;">Dynamic voice modulation based on emotion.</p>
+        
+        <form action="/analyze" method="post">
+            <textarea name="text" placeholder="Enter text for emotional synthesis...">{{text if text else ""}}</textarea>
+            <button type="submit" class="btn btn-blue">Synthesize Voice</button>
+        </form>
+
+        {% if emotion %}
+        <div class="output-panel">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span><strong>Mood:</strong> {{emotion | capitalize}}</span>
+                <span><strong>Confidence:</strong> {{intensity}}</span>
+            </div>
+            <div style="font-size: 13px; color: #94a3b8; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                Rate: {{params.rate}} | Volume: {{params.volume}} | Pitch: {{params.pitch}}
+            </div>
+            <audio controls autoplay><source src="/audio" type="audio/mpeg"></audio>
+        </div>
+        {% endif %}
+    </div>
+
 </div>
 
 </body>

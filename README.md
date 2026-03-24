@@ -1,46 +1,89 @@
-# 🎙️ VocalSync AI: The Empathy Engine
+# 🎙️ VocalSync AI & 🎬 Pitch Visualizer
 
 ## 📌 Project Overview
 
-**VocalSync AI** is an advanced Text-to-Speech (TTS) system that transforms plain text into expressive speech by dynamically adapting voice characteristics based on detected emotions and their intensity.
+**VocalSync AI** is a dual-purpose **Generative AI suite** designed to enhance professional communication through voice and visual storytelling.
 
-Unlike traditional TTS systems, VocalSync AI bridges the gap between robotic output and human-like expression by incorporating **emotion detection**, **context awareness**, and **voice modulation**.
+It consists of two intelligent systems:
+
+### 1️⃣ 🎙️ The Empathy Engine (TTS)
+
+A context-aware Text-to-Speech system that converts plain text into expressive speech by dynamically modulating voice parameters based on detected emotions.
+
+### 2️⃣ 🎬 The Pitch Visualizer (Storyboard Generator)
+
+An AI-powered storytelling engine that transforms narratives into structured, cinematic storyboards using intelligent prompt engineering and image generation.
 
 ---
 
 ## 🚀 Key Features
 
+### 🎙️ Challenge 1: The Empathy Engine
+
 * 🧠 **Context-Aware Emotion Detection**
-  Uses a transformer-based model to classify text into nuanced emotional states.
+  Uses transformer-based models (`distilroberta-base`) to classify text into 7 nuanced emotions.
 
-* 🔍 **Smart Negation Handling**
-  Detects negation words (e.g., *not*, *never*) to avoid incorrect emotion interpretation.
+* 🚫 **Smart Negation Handling**
+  Prevents incorrect emotion detection in phrases like *"I am not angry"*.
 
-* 📊 **Dynamic Intensity Scaling**
-  Applies smooth scaling (square-root based) to avoid abrupt emotional transitions.
-
-* 🔊 **Emotion-Based Voice Modulation**
+* 🔊 **Dynamic Vocal Modulation**
   Adjusts:
 
   * Speech Rate
   * Pitch
   * Volume
 
-* 🌐 **End-to-End Pipeline**
-  **Text → Emotion → Audio**
+* 📊 **Smooth Intensity Scaling**
+  Uses square-root scaling for natural emotional transitions.
 
-* 🎨 **Modern UI (Glassmorphism)**
-  Clean and responsive interface using FastAPI + Jinja2.
+---
+
+### 🎬 Challenge 2: The Pitch Visualizer
+
+* ✂️ **Narrative Segmentation**
+  Splits input text (3–5 sentences) into meaningful scenes.
+
+* 🧠 **Intelligent Prompt Engineering**
+  Enhances raw text into cinematic prompts with:
+
+  * Lighting
+  * Style
+  * Composition
+  * 8K descriptors
+
+* 🎨 **AI Image Generation**
+  Integrated with **Pollinations (Flux / Stable Diffusion)** for high-quality visuals.
+
+* 🖼 **Storyboard Rendering**
+  Displays a structured, caption-based visual sequence in a modern UI.
 
 ---
 
 ## 🛠 Tech Stack
 
-* **Language:** Python
-* **Backend:** FastAPI
-* **NLP Model:** HuggingFace Transformers
-* **TTS Engine:** pyttsx3
-* **Frontend:** HTML (Jinja2 Templates)
+| Category       | Technology                                |
+| -------------- | ----------------------------------------- |
+| **Language**   | Python 3.10+                              |
+| **Backend**    | FastAPI                                   |
+| **NLP/ML**     | HuggingFace Transformers (PyTorch)        |
+| **TTS Engine** | pyttsx3 (Offline)                         |
+| **Image Gen**  | Pollinations AI (Flux / Stable Diffusion) |
+| **Frontend**   | HTML5, CSS3 (Glassmorphism), Jinja2       |
+
+---
+
+## 📂 Project Structure
+
+```
+project/
+│── main.py            # FastAPI router & server logic
+│── engine.py          # Emotion detection + TTS modulation
+│── visualizer.py      # Scene segmentation + prompt engineering
+│── templates/
+│     └── index.html   # Unified UI
+│── requirements.txt
+└── output.mp3         # Generated audio cache
+```
 
 ---
 
@@ -53,27 +96,23 @@ git clone <your-repo-link>
 cd <project-folder>
 ```
 
-### 2️⃣ Create Virtual Environment
+### 2️⃣ Environment Setup
 
 ```bash
 python -m venv venv
 source venv/bin/activate   # Linux/Mac
-venv\Scripts\activate      # Windows
-```
+# venv\Scripts\activate    # Windows
 
-### 3️⃣ Install Dependencies
-
-```bash
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Run the Application
+### 3️⃣ Run the Application
 
 ```bash
 uvicorn main:app --reload
 ```
 
-### 5️⃣ Open in Browser
+### 4️⃣ Open in Browser
 
 ```
 http://127.0.0.1:8000
@@ -81,129 +120,93 @@ http://127.0.0.1:8000
 
 ---
 
-## 📂 Project Structure
+## 🧠 Methodology & Design Choices
 
-```
-project/
-│── engine.py          # Emotion detection + TTS logic
-│── main.py            # FastAPI application
-│── templates/
-│     └── index.html   # UI
-│── requirements.txt
-```
+### 🎨 Intelligent Prompt Engineering (Challenge 2)
 
----
+To avoid weak image outputs, a **Contextual Enhancement Wrapper** is implemented.
 
-## 🧠 Core Design & Logic
+**Example:**
 
-### 1️⃣ Emotion Detection
+* **Input:**
+  `"The team worked through the night."`
 
-Model Used:
+* **Engineered Prompt:**
+  `"Masterpiece cinematic digital art of a team working through the night, 8k resolution, professional studio lighting, highly detailed, dramatic composition."`
 
-```
-j-hartmann/emotion-english-distilroberta-base
-```
+✅ This ensures:
 
-* Outputs probability distribution across emotions:
-
-  * Joy, Sadness, Anger, Fear, Surprise, Disgust, Neutral
+* Better visual quality
+* Consistent artistic style
+* Rich storytelling output
 
 ---
 
-### 2️⃣ Intensity Calculation
+### 🔊 Emotion-to-Voice Mapping (Challenge 1)
 
-We calculate emotional intensity as:
-
-```
-Intensity = Top Score − Second Top Score
-```
-
-✅ **Why this approach?**
-
-* Captures confidence gap
-* Reduces ambiguity
-* More stable than raw probability
+| Emotion | Rate        | Volume | Pitch        |
+| ------- | ----------- | ------ | ------------ |
+| Joy     | 1.2× Faster | High   | High         |
+| Sadness | 0.7× Slower | Low    | Low          |
+| Anger   | 1.3× Faster | Max    | Medium/Harsh |
+| Neutral | 1.0× Base   | Medium | Steady       |
 
 ---
 
-### 3️⃣ Emotion → Voice Mapping
+## 🔮 Bonus Objectives Achieved
 
-| Emotion  | Rate      | Volume | Pitch  |
-| -------- | --------- | ------ | ------ |
-| Joy      | High      | High   | High   |
-| Sadness  | Low       | Low    | Low    |
-| Anger    | High      | High   | Medium |
-| Fear     | Medium    | Medium | Low    |
-| Surprise | Very High | High   | High   |
-| Neutral  | Medium    | Medium | Medium |
+* ✅ **Dynamic UI** – Real-time generation in a single dashboard
+* ✅ **Visual Consistency** – Unified cinematic style across all images
+* ✅ **Negation Awareness** – Handles complex emotional phrasing
+* ✅ **Full AI Integration** – Real-time image + speech generation
 
 ---
 
-### 4️⃣ Intensity-Based Modulation
-
-Voice parameters dynamically adapt:
-
-* **Rate**
-
-  * Faster → Joy, Anger
-  * Slower → Sadness
-
-* **Volume**
-
-  * Scales with intensity (max capped at 1.0)
-
-* **Pitch**
-
-  * Higher → Joy, Surprise
-  * Lower → Sadness
-
----
-
-## 📌 Example
+## 📌 Example Workflow
 
 **Input:**
 
 ```
-"I am very happy today because I got a job!"
+"We worked all night to finish the project, and finally succeeded."
 ```
 
 **Output:**
 
-* Emotion: **Joy**
-* Intensity: **High**
-* Voice: **Fast, energetic, high-pitch**
+* 🎙 Emotion-driven speech (motivational tone)
+* 🎬 3–4 scene storyboard
+* 🎨 Cinematic AI-generated visuals
 
 ---
 
 ## ⚠️ Limitations
 
-* pyttsx3 has limited pitch control (OS-dependent)
-* Less realistic compared to modern APIs (e.g., ElevenLabs)
-* No speaker consistency or advanced prosody modeling
+* pyttsx3 has limited pitch control (OS dependent)
+* Image consistency across scenes may vary slightly
+* No advanced speaker identity modeling
 
 ---
 
 ## 🔮 Future Improvements
 
 * 🔊 Integrate ElevenLabs / Google TTS
-* ⚡ Real-time audio streaming
-* 🧠 Improved contextual emotion understanding
-* 🎨 Enhanced UI (animations, waveform visualization)
+* 🎥 Add video generation from storyboard
+* ⚡ Real-time streaming audio + visuals
+* 🧠 Improved contextual reasoning for prompts
 
 ---
 
 ## 👨‍💻 Author
 
 **Harsha Vardhan Reddy**
+Computer Science Undergraduate | IIIT Sri City
 
 ---
 
-## ⭐ Summary
+## ⭐ Final Summary
 
-VocalSync AI enhances traditional TTS by adding:
+VocalSync AI combines:
 
-✔ Emotion Intelligence
-✔ Context Awareness
-✔ Dynamic Voice Expression
+✔ Emotionally Intelligent Speech
+✔ AI-Powered Storytelling
+✔ Advanced Prompt Engineering
 
-Making machine-generated speech **more human, expressive, and engaging**.
